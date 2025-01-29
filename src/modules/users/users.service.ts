@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   HttpException,
   Injectable,
@@ -13,6 +14,7 @@ import { JwtService } from '@nestjs/jwt';
 import { LoginUserDto } from './dtos/login-user.dto';
 import { LoginResponse, UserPayload } from './interfaces/users-login.interface';
 import { UpateUserDto } from './dtos/update-user.dto';
+import { PrismaClientValidationError } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class UsersService {
@@ -40,6 +42,10 @@ export class UsersService {
         throw new ConflictException('Email already registered');
       }
 
+      if (error instanceof PrismaClientValidationError) {
+        throw new BadRequestException('Invalid input data' + error);
+      }
+      
       throw new HttpException(error, 500);
     }
   }
