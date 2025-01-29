@@ -1,0 +1,95 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int            @id @default(autoincrement())
+  name      String
+  password  String
+  email     String         @unique
+  roles     RolesOnUsers[]
+  createdAt DateTime       @default(now())
+  birthDate DateTime
+  posts     Post[]
+
+  @@map("users")
+}
+
+model Post {
+  id         Int                 @id @default(autoincrement())
+  slug       String              @unique
+  title      String              @unique
+  body       String              @db.Text()
+  createdAt  DateTime            @default(now())
+  updateddAt DateTime            @default(now())
+  authorId   Int
+  author     User                @relation(fields: [authorId], references: [id])
+  postTypeId Int
+  postType   PostType            @relation(fields: [postTypeId], references: [id])
+  postTopics PostTopicsOnPosts[]
+
+  @@map("posts")
+}
+
+model PostTopic {
+  id          Int                 @id @default(autoincrement())
+  slug        String              @unique
+  name        String              @unique
+  description String              @db.Text()
+  createdAt   DateTime            @default(now())
+  posts       PostTopicsOnPosts[]
+
+  @@map("postTopics")
+}
+
+model PostTopicsOnPosts {
+  postId      Int
+  Post        Post      @relation(fields: [postId], references: [id])
+  postTopicId Int
+  PostTopic   PostTopic @relation(fields: [postTopicId], references: [id])
+
+  @@id([postId, postTopicId])
+  @@map("postTopicsOnPosts")
+}
+
+model PostType {
+  id          Int    @id @default(autoincrement())
+  name        String @unique
+  slug        String @unique
+  description String @db.Text()
+  Post        Post[]
+
+  @@map("postTypes'")
+}
+
+model Role {
+  id          Int            @id @default(autoincrement())
+  name        String
+  description String
+  users       RolesOnUsers[]
+
+  @@map("roles")
+}
+
+model RolesOnUsers {
+  userId     Int
+  User       User     @relation(fields: [userId], references: [id])
+  roleId     Int
+  Role       Role     @relation(fields: [roleId], references: [id])
+  assignedAt DateTime @default(now())
+  assignedBy String
+
+  @@id([userId, roleId])
+  @@map("roleOnUsers")
+}
