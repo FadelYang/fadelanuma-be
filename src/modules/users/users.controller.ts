@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Request,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create-user.dto';
@@ -16,6 +17,7 @@ import { User } from '@prisma/client';
 import { LoginResponse, UserPayload } from './interfaces/users-login.interface';
 import { ExpressRequestWuthUser } from './interfaces/express-request-with-user.interface';
 import { Public } from 'src/common/decorators/public.decorator';
+import { IsMineGuard } from 'src/common/guards/is-mine-guard';
 
 @Controller('users')
 export class UsersController {
@@ -39,6 +41,7 @@ export class UsersController {
   }
 
   @Patch(':id')
+  @UseGuards(IsMineGuard)
   async updateUser(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpateUserDto,
@@ -48,6 +51,7 @@ export class UsersController {
   }
 
   @Patch(':id')
+  @UseGuards(IsMineGuard)
   async deleteUser(@Param('id', ParseIntPipe) id: number): Promise<String> {
     return this.usersService.deleteUser(+id);
   }
