@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { PrismaService } from './core/services/prisma/prisma.service';
 import { UsersModule } from './modules/users/users.module';
 import { JwtModule } from '@nestjs/jwt';
+import { CoreModule } from './core/core.module';
 
 @Module({
   imports: [
     UsersModule,
+    CoreModule,
     JwtModule.register({
       global: true,
       secret: 'this_is_super_secret_key',
@@ -15,6 +16,6 @@ import { JwtModule } from '@nestjs/jwt';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService],
+  providers: [AppService],
 })
 export class AppModule {}
