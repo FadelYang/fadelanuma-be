@@ -6,13 +6,15 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Request,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { LoginUserDto } from './dtos/login-user.dto';
 import { UpateUserDto } from './dtos/update-user.dto';
 import { User } from '@prisma/client';
-import { LoginResponse } from './interfaces/users-login.interface';
+import { LoginResponse, UserPayload } from './interfaces/users-login.interface';
+import { ExpressRequestWuthUser } from './interfaces/express-request-with-user.interface';
 
 @Controller('users')
 export class UsersController {
@@ -29,8 +31,8 @@ export class UsersController {
   }
 
   @Get('me')
-  me(): string {
-    return 'Get my profile';
+  me(@Request() req: ExpressRequestWuthUser): UserPayload {
+    return req.user;
   }
 
   @Patch(':id')

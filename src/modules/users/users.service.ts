@@ -45,7 +45,7 @@ export class UsersService {
       if (error instanceof PrismaClientValidationError) {
         throw new BadRequestException('Invalid input data' + error);
       }
-      
+
       throw new HttpException(error, 500);
     }
   }
