@@ -15,16 +15,19 @@ import { UpateUserDto } from './dtos/update-user.dto';
 import { User } from '@prisma/client';
 import { LoginResponse, UserPayload } from './interfaces/users-login.interface';
 import { ExpressRequestWuthUser } from './interfaces/express-request-with-user.interface';
+import { Public } from 'src/common/decorators/public.decorator';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @Public()
   @Post('register')
   async registerUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.registerUser(createUserDto);
   }
 
+  @Public()
   @Post('login')
   async loginUser(@Body() loginUserDto: LoginUserDto): Promise<LoginResponse> {
     return this.usersService.loginUser(loginUserDto);
