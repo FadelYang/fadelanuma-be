@@ -13,7 +13,7 @@ import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 export class AuthGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
-    private reflector: Reflector  
+    private reflector: Reflector,
   ) {}
 
   private extractTokenFromHeader(request: Request): string | undefined {
@@ -25,7 +25,7 @@ export class AuthGuard implements CanActivate {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
-    ])
+    ]);
 
     if (isPublic) {
       return true;
