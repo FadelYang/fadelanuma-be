@@ -14,14 +14,15 @@ datasource db {
 }
 
 model User {
-  id        Int            @id @default(autoincrement())
-  name      String
-  password  String
-  email     String         @unique
-  roles     RolesOnUsers[]
-  createdAt DateTime       @default(now())
-  birthDate DateTime       @db.Date()
-  posts     Post[]
+  id         Int            @id @default(autoincrement())
+  name       String
+  password   String
+  email      String         @unique
+  roles      RolesOnUsers[]
+  createdAt  DateTime       @default(now())
+  birthDate  DateTime       @db.Date()
+  posts      Post[]
+  postTopics PostTopic[]
 
   @@map("users")
 }
@@ -44,11 +45,16 @@ model Post {
 
 model PostTopic {
   id          Int                 @id @default(autoincrement())
-  slug        String              @unique
-  name        String              @unique
+  userId      Int
+  User        User                @relation(fields: [userId], references: [id])
+  slug        String
+  name        String
   description String              @db.Text()
   createdAt   DateTime            @default(now())
   posts       PostTopicsOnPosts[]
+
+  @@unique([userId, slug])
+  @@unique([userId, name])
 
   @@map("postTopics")
 }
