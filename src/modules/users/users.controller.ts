@@ -18,7 +18,7 @@ import { LoginResponse, UserPayload } from './interfaces/users-login.interface';
 import { ExpressRequestWuthUser } from './interfaces/express-request-with-user.interface';
 import { Public } from 'src/common/decorators/public.decorator';
 import { IsMineGuard } from 'src/common/guards/is-mine-guard';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @ApiBearerAuth('access-token')
 @Controller('users')
@@ -27,6 +27,15 @@ export class UsersController {
 
   @Public()
   @Post('register')
+  @ApiOperation({
+    summary: 'Register a new user',
+    operationId: 'create',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Created',
+    type: CreateUserDto,
+  })
   async registerUser(@Body() createUserDto: CreateUserDto) {
     const registeredUser = await this.usersService.registerUser(createUserDto);
 
@@ -39,6 +48,15 @@ export class UsersController {
 
   @Public()
   @Post('login')
+  @ApiOperation({
+    summary: 'Login',
+    operationId: 'login',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Success login',
+    type: CreateUserDto,
+  })
   async loginUser(@Body() loginUserDto: LoginUserDto) {
     const { access_token, user } =
       await this.usersService.loginUser(loginUserDto);
