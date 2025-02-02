@@ -6,6 +6,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { CoreModule } from './core/core.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './common/guards/auth.guard';
+import { PostTypesModule } from './modules/post-types/post-types.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AuthGuard } from './common/guards/auth.guard';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '12h' },
     }),
+    PostTypesModule,
   ],
   controllers: [AppController],
   providers: [
@@ -23,7 +25,7 @@ import { AuthGuard } from './common/guards/auth.guard';
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
-    }
+    },
   ],
 })
 export class AppModule {}
