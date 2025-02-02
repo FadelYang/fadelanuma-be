@@ -50,7 +50,7 @@ export class UsersService {
     }
   }
 
-  async loginUser(loginUserDto: LoginUserDto): Promise<LoginResponse> {
+  async loginUser(loginUserDto: LoginUserDto) {
     try {
       const user = await this.prisma.user.findUnique({
         where: { email: loginUserDto.email },
@@ -70,8 +70,13 @@ export class UsersService {
         name: user.name,
       };
 
+      const access_token = await this.jwtService.signAsync(payload);
+
+      const { password, ...userWithoutPassword } = user;
+
       return {
-        access_token: await this.jwtService.signAsync(payload),
+        access_token,
+        user: userWithoutPassword,
       };
     } catch (error) {
       throw new HttpException(error, 500);
@@ -110,7 +115,7 @@ export class UsersService {
     }
   }
 
-  async deleteUser(id: number): Promise<string> {
+  async deleteUser(id: number) {
     try {
       const user = await this.prisma.user.findUniqueOrThrow({
         where: { id },
@@ -120,7 +125,7 @@ export class UsersService {
         where: { id },
       });
 
-      return `User with id ${user.id} deleted`;
+      return user;
     } catch (error) {
       if (error.code === 'P2025') {
         throw new NotFoundException(`User with id ${id} not found`);

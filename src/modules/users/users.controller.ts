@@ -27,14 +27,31 @@ export class UsersController {
 
   @Public()
   @Post('register')
-  async registerUser(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.usersService.registerUser(createUserDto);
+  async registerUser(@Body() createUserDto: CreateUserDto) {
+    const registeredUser = await this.usersService.registerUser(createUserDto);
+
+    const response = {
+      message: 'Success registered user',
+      data: registeredUser,
+    };
+    return response;
   }
 
   @Public()
   @Post('login')
-  async loginUser(@Body() loginUserDto: LoginUserDto): Promise<LoginResponse> {
-    return this.usersService.loginUser(loginUserDto);
+  async loginUser(@Body() loginUserDto: LoginUserDto) {
+    const { access_token, user } =
+      await this.usersService.loginUser(loginUserDto);
+
+    const response = {
+      message: 'Login success',
+      data: {
+        ...user,
+        access_token,
+      },
+    };
+
+    return response;
   }
 
   @Get('me')
@@ -47,14 +64,31 @@ export class UsersController {
   async updateUser(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpateUserDto,
-  ): Promise<User> {
-    console.log(updateUserDto);
-    return this.usersService.updateUser(+id, updateUserDto);
+  ) {
+    const updatedUser = await this.usersService.updateUser(+id, updateUserDto);
+
+    const response = {
+      message: `Succes update user with id ${id}`,
+      data: {
+        updatedUser,
+      },
+    };
+
+    return response;
   }
 
   @Patch(':id')
   @UseGuards(IsMineGuard)
-  async deleteUser(@Param('id', ParseIntPipe) id: number): Promise<String> {
-    return this.usersService.deleteUser(+id);
+  async deleteUser(@Param('id', ParseIntPipe) id: number) {
+    const deletedUser = await this.usersService.deleteUser(+id);
+
+    const response = {
+      message: `Success deleted user with id ${id}`,
+      data: {
+        deletedUser,
+      },
+    };
+
+    return response;
   }
 }

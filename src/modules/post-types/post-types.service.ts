@@ -90,10 +90,10 @@ export class PostTypesService {
       });
 
       await this.prisma.postType.delete({
-        where: { id }
-      })
+        where: { id },
+      });
 
-      return `Post type with id ${id} deleted`
+      return `Post type with id ${id} deleted`;
     } catch (error) {
       if (error.code === 'P2025') {
         throw new NotFoundException(`Post type with ${id} not found`);
