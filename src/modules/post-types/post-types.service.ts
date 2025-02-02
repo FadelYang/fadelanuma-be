@@ -93,7 +93,7 @@ export class PostTypesService {
         where: { id },
       });
 
-      return `Post type with id ${id} deleted`;
+      return postType;
     } catch (error) {
       if (error.code === 'P2025') {
         throw new NotFoundException(`Post type with ${id} not found`);
