@@ -18,7 +18,9 @@ import { LoginResponse, UserPayload } from './interfaces/users-login.interface';
 import { ExpressRequestWuthUser } from './interfaces/express-request-with-user.interface';
 import { Public } from 'src/common/decorators/public.decorator';
 import { IsMineGuard } from 'src/common/guards/is-mine-guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth('access-token')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
