@@ -7,6 +7,7 @@ import { CoreModule } from './core/core.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './common/guards/auth.guard';
 import { PostTypesModule } from './modules/post-types/post-types.module';
+import { PostTopicsModule } from './modules/post-topics/post-topics.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { PostTypesModule } from './modules/post-types/post-types.module';
       signOptions: { expiresIn: '12h' },
     }),
     PostTypesModule,
+    PostTopicsModule,
   ],
   controllers: [AppController],
   providers: [
