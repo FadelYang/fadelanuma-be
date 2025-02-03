@@ -8,26 +8,29 @@ import { ExpressRequestWuthUser } from '../users/interfaces/express-request-with
 export class PostTopicsService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createPostTopicDto: CreatePostTopicDto, req: ExpressRequestWuthUser) {
+  async create(
+    createPostTopicDto: CreatePostTopicDto,
+    req: ExpressRequestWuthUser,
+  ) {
     try {
       const userId = req.user.sub;
-      
+
       const newPostTopic = await this.prisma.postTopic.create({
-       data: {
-         userId,
-         name: createPostTopicDto.name,
-         slug: createPostTopicDto.slug,
-         description: createPostTopicDto.description,
-       },
+        data: {
+          userId,
+          name: createPostTopicDto.name,
+          slug: createPostTopicDto.slug,
+          description: createPostTopicDto.description,
+        },
       });
 
       return newPostTopic;
     } catch (error) {
       if (error.code === 'P2002') {
-        throw new ConflictException('Post type already exists')
+        throw new ConflictException('Post type already exists');
       }
 
-      throw new HttpException(error, 500)
+      throw new HttpException(error, 500);
     }
   }
 

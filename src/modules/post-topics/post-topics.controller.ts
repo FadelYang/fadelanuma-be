@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Request } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Request,
+} from '@nestjs/common';
 import { PostTopicsService } from './post-topics.service';
 import { CreatePostTopicDto } from './dto/create-post-topic.dto';
 import { UpdatePostTopicDto } from './dto/update-post-topic.dto';
@@ -13,7 +22,7 @@ export class PostTopicsController {
   @Post()
   create(
     @Request() req: ExpressRequestWuthUser,
-    @Body() createPostTopicDto: CreatePostTopicDto
+    @Body() createPostTopicDto: CreatePostTopicDto,
   ) {
     return this.postTopicsService.create(createPostTopicDto, req);
   }
@@ -29,7 +38,10 @@ export class PostTopicsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostTopicDto: UpdatePostTopicDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updatePostTopicDto: UpdatePostTopicDto,
+  ) {
     return this.postTopicsService.update(+id, updatePostTopicDto);
   }
 
