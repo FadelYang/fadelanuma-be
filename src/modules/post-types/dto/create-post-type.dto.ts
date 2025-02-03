@@ -6,7 +6,7 @@ export class CreatePostTypeDto {
   @ApiProperty({
     example: 'Mini Course',
     description: 'The name of post type',
-    type: String
+    type: String,
   })
   @IsNotEmpty()
   name: string;
@@ -14,7 +14,7 @@ export class CreatePostTypeDto {
   @ApiProperty({
     example: 'mini-course',
     description: 'The slug of post type, generate with post name',
-    type: String
+    type: String,
   })
   @IsNotEmpty()
   @Validate(IsSlugVaid)
@@ -23,7 +23,7 @@ export class CreatePostTypeDto {
   @ApiProperty({
     example: 'The mini course you can finish in one day',
     description: 'The description of post type',
-    type: String
+    type: String,
   })
   description: string;
 }

@@ -34,12 +34,49 @@ export class PostTopicsService {
     }
   }
 
-  findAll() {
-    return `This action returns all postTopics`;
+  async findAll() {
+    try {
+      const postTopics = await this.prisma.postTopic.findMany({
+        distinct: ['name'],
+      });
+
+      return postTopics;
+    } catch (error) {
+      throw new HttpException(error, 500);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} postTopic`;
+  async findByMe(req: ExpressRequestWithUser) {
+    try {
+      const userId = req.user.sub;
+      const postTopicsByMe = await this.prisma.postTopic.findMany({
+        where: {
+          userId: userId,
+        },
+      });
+
+      return postTopicsByMe;
+    } catch (error) {
+      throw new HttpException(error, 500);
+    }
+  }
+
+  async findOne(id: number) {
+    try {
+      const postTopic = await this.prisma.postTopic.findUniqueOrThrow({
+        where: {
+          id: id
+        }
+      });
+
+      return postTopic;
+    } catch (error) {
+      if (error.code === 'P2002') {
+        throw new ConflictException('Post type already exists');
+      }
+
+      throw new HttpException(error, 500);
+    }
   }
 
   update(id: number, updatePostTopicDto: UpdatePostTopicDto) {
