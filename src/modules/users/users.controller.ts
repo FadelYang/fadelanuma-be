@@ -13,9 +13,8 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { LoginUserDto } from './dtos/login-user.dto';
 import { UpateUserDto } from './dtos/update-user.dto';
-import { User } from '@prisma/client';
-import { LoginResponse, UserPayload } from './interfaces/users-login.interface';
-import { ExpressRequestWuthUser } from './interfaces/express-request-with-user.interface';
+import { UserPayload } from './interfaces/users-login.interface';
+import { ExpressRequestWithUser } from './interfaces/express-request-with-user.interface';
 import { Public } from 'src/common/decorators/public.decorator';
 import { IsMineGuard } from 'src/common/guards/is-mine-guard';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -73,7 +72,7 @@ export class UsersController {
   }
 
   @Get('me')
-  me(@Request() req: ExpressRequestWuthUser): UserPayload {
+  me(@Request() req: ExpressRequestWithUser): UserPayload {
     return req.user;
   }
 

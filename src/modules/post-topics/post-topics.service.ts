@@ -2,7 +2,7 @@ import { ConflictException, HttpException, Injectable } from '@nestjs/common';
 import { CreatePostTopicDto } from './dto/create-post-topic.dto';
 import { UpdatePostTopicDto } from './dto/update-post-topic.dto';
 import { PrismaService } from 'src/core/services/prisma/prisma.service';
-import { ExpressRequestWuthUser } from '../users/interfaces/express-request-with-user.interface';
+import { ExpressRequestWithUser } from '../users/interfaces/express-request-with-user.interface';
 
 @Injectable()
 export class PostTopicsService {
@@ -10,7 +10,7 @@ export class PostTopicsService {
 
   async create(
     createPostTopicDto: CreatePostTopicDto,
-    req: ExpressRequestWuthUser,
+    req: ExpressRequestWithUser,
   ) {
     try {
       const userId = req.user.sub;

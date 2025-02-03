@@ -12,7 +12,7 @@ import { PostTopicsService } from './post-topics.service';
 import { CreatePostTopicDto } from './dto/create-post-topic.dto';
 import { UpdatePostTopicDto } from './dto/update-post-topic.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { ExpressRequestWuthUser } from '../users/interfaces/express-request-with-user.interface';
+import { ExpressRequestWithUser } from '../users/interfaces/express-request-with-user.interface';
 
 @ApiBearerAuth('access-token')
 @Controller('post-topics')
@@ -21,14 +21,16 @@ export class PostTopicsController {
 
   @Post()
   create(
-    @Request() req: ExpressRequestWuthUser,
+    @Request() req: ExpressRequestWithUser,
     @Body() createPostTopicDto: CreatePostTopicDto,
   ) {
     return this.postTopicsService.create(createPostTopicDto, req);
   }
 
   @Get()
-  findAll() {
+  findAll(
+    @Request() req: ExpressRequestWithUser
+  ) {
     return this.postTopicsService.findAll();
   }
 

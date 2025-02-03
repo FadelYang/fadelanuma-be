@@ -12,7 +12,7 @@ import { User } from '@prisma/client';
 import { compare, hash } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { LoginUserDto } from './dtos/login-user.dto';
-import { LoginResponse, UserPayload } from './interfaces/users-login.interface';
+import { UserPayload } from './interfaces/users-login.interface';
 import { UpateUserDto } from './dtos/update-user.dto';
 import { PrismaClientValidationError } from '@prisma/client/runtime/library';
 
