@@ -1,4 +1,9 @@
-import { ConflictException, HttpException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  HttpException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreatePostTopicDto } from './dto/create-post-topic.dto';
 import { UpdatePostTopicDto } from './dto/update-post-topic.dto';
 import { PrismaService } from 'src/core/services/prisma/prisma.service';
@@ -65,8 +70,8 @@ export class PostTopicsService {
     try {
       const postTopic = await this.prisma.postTopic.findUniqueOrThrow({
         where: {
-          id: id
-        }
+          id: id,
+        },
       });
 
       return postTopic;
@@ -79,11 +84,48 @@ export class PostTopicsService {
     }
   }
 
-  update(id: number, updatePostTopicDto: UpdatePostTopicDto) {
-    return `This action updates a #${id} postTopic`;
+  async update(id: number, updatePostTopicDto: UpdatePostTopicDto) {
+    try {
+      await this.prisma.postTopic.findUniqueOrThrow({
+        where: { id },
+      });
+
+      const updatedPostTopic = await this.prisma.postTopic.update({
+        where: { id },
+        data: {
+          ...updatePostTopicDto,
+        },
+      });
+
+      return updatedPostTopic;
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException(`Post topic with id ${id} not found`);
+      }
+
+      if (error.code === 'P2002') {
+        throw new ConflictException('Post type already exist');
+      }
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} postTopic`;
+  async remove(id: number) {
+    try {
+      const postTopic = await this.prisma.postTopic.findUniqueOrThrow({
+        where: { id },
+      });
+
+      await this.prisma.postTopic.delete({
+        where: { id },
+      });
+
+      return postTopic;
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException(`Post topic with id ${id} not found`);
+      }
+
+      throw new HttpException(error, 500);
+    }
   }
 }

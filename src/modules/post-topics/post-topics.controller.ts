@@ -1,3 +1,4 @@
+import { PostTopic } from './entities/post-topic.entity';
 import {
   Controller,
   Get,
@@ -65,23 +66,44 @@ export class PostTopicsController {
   }
 
   @Get(':id')
-  findOne(
-    @Param('id') id: string,
-    @Request() req: ExpressRequestWithUser
-  ) {
-    return this.postTopicsService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const PostTopic = await this.postTopicsService.findOne(+id);
+
+    const response = {
+      message: 'Success get post topic data',
+      data: PostTopic,
+    };
+
+    return response;
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updatePostTopicDto: UpdatePostTopicDto,
   ) {
-    return this.postTopicsService.update(+id, updatePostTopicDto);
+    const updatedPostTopic = await this.postTopicsService.update(
+      +id,
+      updatePostTopicDto,
+    );
+
+    const response = {
+      message: `Success updated post topic with id ${id}`,
+      data: updatedPostTopic,
+    };
+
+    return response;
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.postTopicsService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const deletedPostTopic = await this.postTopicsService.remove(+id);
+
+    const response = {
+      message: `Success deleted post topic with id ${id}`,
+      data: deletedPostTopic,
+    };
+
+    return response;
   }
 }

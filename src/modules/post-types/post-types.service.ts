@@ -60,7 +60,7 @@ export class PostTypesService {
 
   async update(id: number, updatePostTypeDto: UpdatePostTypeDto) {
     try {
-      await this.prisma.user.findUniqueOrThrow({
+      await this.prisma.postType.findUniqueOrThrow({
         where: { id },
       });
 

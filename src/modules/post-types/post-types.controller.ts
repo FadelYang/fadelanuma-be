@@ -12,7 +12,6 @@ import { CreatePostTypeDto } from './dto/create-post-type.dto';
 import { UpdatePostTypeDto } from './dto/update-post-type.dto';
 import { Public } from 'src/common/decorators/public.decorator';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { PostType } from './entities/post-type.entity';
 
 @ApiBearerAuth('access-token')
 @Controller('post-types')
@@ -82,7 +81,7 @@ export class PostTypesController {
 
     const response = {
       message: `Success deleted post type with id ${id}`,
-      data: PostType,
+      data: deletedPostType,
     };
 
     return response;
